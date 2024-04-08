@@ -33,7 +33,7 @@ public_users.post("/register", (req,res) => {
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
     new Promise((resolve, reject) => {
-        res.send(JSON.stringify(books,null,4));
+        res.send(books);
         resolve();
     });
 });
@@ -45,7 +45,7 @@ public_users.get('/isbn/:isbn',function (req, res) {
         resolve(isbn);
     });
     myPromise.then((isbn) => {
-        res.send(JSON.stringify(books[isbn]),null,4);
+        res.send(books[isbn]);
     });
  });
   

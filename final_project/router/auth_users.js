@@ -45,29 +45,28 @@ regd_users.post("/login", (req,res) => {
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
-  const review = req.body.review;
-  const username = req.body.username;
-  const isbn = req.params.isbn;
-  let bookreviews = books[isbn]["reviews"];
-  let alreadyreviewed = false
-  for (const reviews in bookreviews) {
-    if (bookreviews[reviews]["username"] === username) {
-        books[isbn]["reviews"][reviews]["review"] = review;
-        alreadyreviewed = true;
-        res.send("Review modified\n" + JSON.stringify(books[isbn]));
+    const review = req.query["review"];
+    const username = req.body.username;
+    const isbn = req.params.isbn;
+    let bookreviews = books[isbn]["reviews"];
+    let alreadyreviewed = false
+    for (const reviews in bookreviews) {
+        if (bookreviews[reviews]["username"] === username) {
+            books[isbn]["reviews"][reviews]["review"] = review;
+            alreadyreviewed = true;
+            res.send("Review modified\n" + JSON.stringify(books[isbn]));
+        }
     }
-  }
-  if (!alreadyreviewed) {
-    let newReview = {"review": review, "username": username}
-    if (Object.keys(bookreviews).length === 0) {
-        books[isbn]["reviews"] = [newReview];
+    if (!alreadyreviewed) {
+        let newReview = {"review": review, "username": username}
+        if (Object.keys(bookreviews).length === 0) {
+            books[isbn]["reviews"] = [newReview];
+        }
+        else {
+            books[isbn]["reviews"].push(newReview);
+        }
+        res.send("Review added\n"+ JSON.stringify(books[isbn]));
     }
-    else {
-        books[isbn]["reviews"].push(newReview);
-    }
-    console.log(books[isbn]);
-    res.send("Review added\n"+ JSON.stringify(books[isbn]));
-  }
 });
 
 //Delete a book review
