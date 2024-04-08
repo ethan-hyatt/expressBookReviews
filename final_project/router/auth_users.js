@@ -49,11 +49,8 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   const username = req.body.username;
   const isbn = req.params.isbn;
   let bookreviews = books[isbn]["reviews"];
-  console.log(bookreviews);
-  console.log(review);
   let alreadyreviewed = false
   for (const reviews in bookreviews) {
-    console.log(reviews);
     if (bookreviews[reviews]["username"] === username) {
         books[isbn]["reviews"][reviews]["review"] = review;
         alreadyreviewed = true;
@@ -71,6 +68,19 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     console.log(books[isbn]);
     res.send("Review added\n"+ JSON.stringify(books[isbn]));
   }
+});
+
+//Delete a book review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    const username = req.body.username;
+    const isbn = req.params.isbn;
+    let bookreviews = books[isbn]["reviews"];
+    for (const reviews in bookreviews) {
+        if (bookreviews[reviews]["username"] === username) {
+            books[isbn]["reviews"].splice(reviews,1);
+            res.send("Review deleted\n" + JSON.stringify(books[isbn]));
+        }
+      }
 });
 
 module.exports.authenticated = regd_users;
